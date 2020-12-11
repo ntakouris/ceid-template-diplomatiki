@@ -1,0 +1,221 @@
+%%%
+\documentclass[11pt,a4paper]{template}
+
+\usepackage[Greek,Latin]{ucharclasses}
+
+\usepackage{xltxtra,xgreek}
+\setTransitionsForGreek{\setlanguage{greek}}{\setlanguage{american}}
+\setmainfont[Kerning=On,Mapping=tex-text]{Linux Libertine O}
+
+\usepackage{graphics}
+\usepackage{epstopdf}
+\usepackage{indentfirst}
+\usepackage{verbatim}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\bibliographystyle{hellas}
+\usepackage{hyphenat}
+\usepackage{makeidx}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage[hyphens]{url}
+%\usepackage[hyphenbreaks]{breakurl}
+\usepackage{enumitem}
+\usepackage{xspace}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{subfig}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{bbding}
+\usepackage{footmisc}
+\captionsetup{belowskip=10pt,aboveskip=15pt}
+\addto\captionsgreek{%
+  \renewcommand{\indexname}{Ευρετήριο όρων}%
+}
+\makeindex
+
+% 1.5 spacing
+\renewcommand{\baselinestretch}{1.2}
+
+% latin text (and greek text)
+\newcommand{\tl}[1]{\textlatin{#1}}
+\newcommand{\tg}[1]{\textgreek{#1}}
+
+% typeset short english phrases
+\newcommand{\en}[1]{\foreignlanguage{english}{#1}}
+
+% typeset source code
+\newcommand{\src}[1]{{\tt\en{#1}}}
+
+% typeset a backslash
+\newcommand{\bkslash}{\en{\symbol{92}}}
+
+
+% Colors
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Listing style Python Code
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+%    showtabs=false,                  
+    tabsize=2
+}
+
+% For JSON listing
+\newcommand\JSONnumbervaluestyle{\color{blue}}
+\newcommand\JSONstringvaluestyle{\color{red}}
+\makeatletter
+% switch used as state variable
+\newif\ifcolonfoundonthisline
+% style
+\lstdefinestyle{json}
+{
+  backgroundcolor=\color{backcolour},
+  showstringspaces    = false,
+  keywords            = {false,true},
+  alsoletter          = 0123456789.,
+  morestring          = [s]{"}{"},
+  stringstyle         = \ifcolonfoundonthisline\JSONstringvaluestyle\fi,
+  MoreSelectCharTable =%
+    \lst@DefSaveDef{`:}\colon@json{\processColon@json},
+  basicstyle          = \ttfamily,
+  keywordstyle        = \ttfamily\bfseries,
+}
+% flip the switch if a colon is found in Pmode
+\newcommand\processColon@json{%
+  \colon@json%
+  \ifnum\lst@mode=\lst@Pmode%
+    \global\colonfoundonthislinetrue%
+  \fi
+}
+
+\lst@AddToHook{Output}{%
+  \ifcolonfoundonthisline%
+    \ifnum\lst@mode=\lst@Pmode%
+      \def\lst@thestyle{\JSONnumbervaluestyle}%
+    \fi
+  \fi
+  %override by keyword style if a keyword is detected!
+  \lsthk@DetectKeywords% 
+}
+
+% reset the switch at the end of line
+\lst@AddToHook{EOL}%
+  {\global\colonfoundonthislinefalse}
+
+\makeatother
+
+%% THESIS INFO 
+%%
+%
+% Τίτλος Πτυχιακής Εργασίας
+	\title{Τίτλος Εργασίας}
+% "του" ή "της", ανάλογα με το φύλο του σπουδαστή
+	\edef\toutis{του/της}
+% Ονοματεπώνυμο σπουδαστή (ΚΕΦΑΛΑΙΑ, γενική πτώση)
+	\edef\authorNameCapital{ΟΝΟΜΑΤΕΠΩΝΥΜΟ}
+% Ονοματεπώνυμο σπουδαστή (πεζά, ονομαστική πτώση)
+	\author{Ονοματεπώνυμο}
+% Ονοματεπώνυμο Επιβλέποντα Καθηγητή
+	\supervisor{Ονοματεπώνυμο}
+% Τίτλος Επιβλέποντα Καθηγητή (πχ καθηγητής, λέκτορας κτλ)
+	\edef\supervisorTitle{Τίτλος}
+%% "Επιβλέπων" ή "Επιβλέπουσα", ανάλογα με το φύλο του Επιβλέποντα Καθηγητή
+	\edef\supervisorMaleFemale{Επιβλέπων}
+% Ονοματεπώνυμο Συνεπιβλέποντα Καθηγητή
+	\covisor{Ονοματεπώνυμο}
+% Τίτλος Επιβλέποντα Καθηγητή
+	\edef\covisorTitle{Τίτλος}
+% "Συνεπιβλέπων" ή "Συνεπιβλέπουσα", ανάλογα με το φύλο του Καθηγητή
+	\edef\covisorMaleFemale{Συνεπιβλέπων}
+% Ονοματεπώνυμο Συνεπιβλέποντα Καθηγητή
+	\covisorS{Ονοματεπώνυμο}
+% Τίτλος Συνεπιβλέποντα Καθηγητή
+	\edef\covisorSTitle{Τίτλος}
+% "Συνεπιβλέπων" ή "Συνεπιβλέπουσα", ανάλογα με το φύλο του Καθηγητή
+	\edef\covisorSMaleFemale{Συνεπιβλέπων}
+% Τόπος, μήνας και έτος
+	\edef\thesisPlaceDate{Πάτρα, Ακαδημαικό Έτος Α-β}
+% Ημερομηνία Εξέτασης
+	\edef\examinationDate{Ημερομηνία Εξέτασης}
+% Έτος Copyright
+	\edef\copyrightYear{Α-Β}
+% Ονοματεπώνυμο 1ου εξεταστή
+	\epitropiF{Ονοματεπώνυμο}
+% Τίτλος 1ου εξεταστή
+	\edef\epitropiFTitle{Τίτλος}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{biblatex}
+\addbibresource{references.bib}
+
+
+\begin{document}
+\maketitle
+
+\frontmatter	
+% Ευχαριστίες
+	\include{acknowledgements}
+% Περίληψη
+    \include{abstract}
+% Αφιέρωση
+   \thesisDedication{Αφιέρωση}
+% Πίνακας Περιεχομένων
+	\tableofcontents
+% Κατάλογος Σχημάτων
+	\listoffigures
+	\listofalgorithms
+% Κατάλογος Πινάκων
+	\listoftables
+% Κατάλογος listings
+\clearpage
+
+
+\mainmatter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% INCLUDE YOUR CHAPTERS/SECTIONS HERE
+%%
+
+% Εισαγωγή
+    \include{intro}
+% Κεφάλαια
+   \include{chap1}
+	\cleardoublepage
+% Βιβλιογραφία - Αναφορές
+\chapter{Βιβλιογραφία}
+
+\begingroup
+\renewcommand{\section}[2]{}%
+%\renewcommand{\chapter}[2]{}% for other classes
+\printbibliography[heading=none]
+\endgroup
+
+% Συντομογραφίες - Αρκτικόλεξα - Ακρωνύμια
+	\include{abbreviations}
+
+%    \cleardoublepage
+	
+	\pagebreak
+	\pagestyle{empty}
+\end{document}
